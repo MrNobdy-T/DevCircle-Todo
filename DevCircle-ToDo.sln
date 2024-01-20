@@ -3,12 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevCircle-Todo.API", "DevCircle-Todo.API\DevCircle-Todo.API.csproj", "{914978E4-511B-40A4-BCC2-0750B123B37E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevCircle-Todo.Interface", "DevCircle-Todo.Interface\DevCircle-Todo.Interface.csproj", "{1BDCC266-499B-484B-9C89-B74E2A008997}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{914978E4-511B-40A4-BCC2-0750B123B37E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{914978E4-511B-40A4-BCC2-0750B123B37E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{914978E4-511B-40A4-BCC2-0750B123B37E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{914978E4-511B-40A4-BCC2-0750B123B37E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BDCC266-499B-484B-9C89-B74E2A008997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BDCC266-499B-484B-9C89-B74E2A008997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BDCC266-499B-484B-9C89-B74E2A008997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BDCC266-499B-484B-9C89-B74E2A008997}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {06D2958F-EBC2-411D-B2D9-38E375C6EA3B}
 	EndGlobalSection
 EndGlobal
