@@ -28,5 +28,9 @@ namespace DevCircle_Todo.API.Entities
 			Title = title;
 			Description = description;
 		}
-	}
+
+        public TodoItem()
+        {
+        }
+    }
 }
