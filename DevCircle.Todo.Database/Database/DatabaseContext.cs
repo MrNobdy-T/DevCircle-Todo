@@ -1,10 +1,10 @@
-﻿using DevCircle_Todo.API.Entities;
+﻿using DevCircle.Todo.Database.Interfaces;
+using DevCircle.Todo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using NodaTime.Text;
 
 namespace DevCircle_Todo.API.Database
 {
-	public class DatabaseContext : DbContext
+	public class DatabaseContext : DbContext, IApplicationDbContext
 	{
 		public DbSet<User> Users { get; set; }
 
@@ -20,6 +20,11 @@ namespace DevCircle_Todo.API.Database
 			modelBuilder.Entity<TodoItem>();
 
 			base.OnModelCreating(modelBuilder);
+		}
+
+		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			return base.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

@@ -1,10 +1,13 @@
 
+using DevCircle.Todo.Application.Extensions;
+using DevCircle.Todo.Database.Extensions;
 using DevCircle_Todo.API.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Diagnostics.Metrics;
+using AutoMapper;
 
 namespace DevCircle_Todo.API
 {
@@ -21,6 +24,9 @@ namespace DevCircle_Todo.API
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
+			builder.Services.AddDatabaseServices();
+			builder.Services.RegisterMappingProfiles();
+			builder.Services.RegisterRequestHandlers();
 
 			var connectionString = builder.Configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
 
