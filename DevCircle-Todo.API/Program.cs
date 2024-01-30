@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using System.Diagnostics.Metrics;
 
 namespace DevCircle_Todo.API
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,15 @@ namespace DevCircle_Todo.API
 			{
 				options.UseNpgsql(dataSource, (x) => x.UseNodaTime());
 			});
+
 			var app = builder.Build();
+
+			// If the database doesnt exist, migrate!
+			using (var scope = app.Services.CreateScope())
+			{
+				var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+				await dbContext.Database.MigrateAsync();
+			}
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
