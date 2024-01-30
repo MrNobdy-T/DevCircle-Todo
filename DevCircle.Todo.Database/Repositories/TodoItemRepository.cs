@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DevCircle.Todo.Database.Interfaces;
 using DevCircle.Todo.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevCircle.Todo.Database.Repositories
 {
@@ -27,6 +28,13 @@ namespace DevCircle.Todo.Database.Repositories
 		{
 			_dbContext.TodoItems.Remove(entity);
 			await _dbContext.SaveChangesAsync();
+		}
+
+		public Task<IEnumerable<TodoItem>> GetAll()
+		{
+			var todoItems = _dbContext.TodoItems.ToList();
+
+			return Task.FromResult<IEnumerable<TodoItem>>(todoItems);
 		}
 
 		public Task<TodoItem> GetEntity(Func<TodoItem, bool> predicate)

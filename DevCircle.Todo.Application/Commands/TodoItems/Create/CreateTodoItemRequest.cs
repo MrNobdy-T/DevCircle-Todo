@@ -10,6 +10,6 @@ namespace DevCircle.Todo.Application.Commands
 {
     public class CreateTodoItemRequest : IRequest<CreateTodoItemResponse>
     {
-        public TodoItemDTO TodoItemDTO { get; set; }
+        public TodoItemDTO TodoItemDTO { get; set; } = null!;
     }
 }
