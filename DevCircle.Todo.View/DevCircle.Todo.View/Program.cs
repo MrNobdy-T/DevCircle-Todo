@@ -1,6 +1,7 @@
-using DevCircle_Todo.Interface.Components;
+using DevCircle.Todo.View.Client.Pages;
+using DevCircle.Todo.View.Components;
 
-namespace DevCircle_Todo.Interface
+namespace DevCircle.Todo.View
 {
 	public class Program
 	{
@@ -10,12 +11,16 @@ namespace DevCircle_Todo.Interface
 
 			// Add services to the container.
 			builder.Services.AddRazorComponents()
-				.AddInteractiveServerComponents();
+				.AddInteractiveWebAssemblyComponents();
 
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
-			if (!app.Environment.IsDevelopment())
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseWebAssemblyDebugging();
+			}
+			else
 			{
 				app.UseExceptionHandler("/Error");
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -28,7 +33,8 @@ namespace DevCircle_Todo.Interface
 			app.UseAntiforgery();
 
 			app.MapRazorComponents<App>()
-				.AddInteractiveServerRenderMode();
+				.AddInteractiveWebAssemblyRenderMode()
+				.AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
 
 			app.Run();
 		}

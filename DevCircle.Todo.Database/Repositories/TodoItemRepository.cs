@@ -39,7 +39,9 @@ namespace DevCircle.Todo.Database.Repositories
 
 		public Task<TodoItem> GetEntity(Func<TodoItem, bool> predicate)
 		{
-			throw new NotImplementedException();
+			var entity = _dbContext.TodoItems.Where((x) => predicate(x)).FirstOrDefault();
+
+			return Task.FromResult(entity!);
 		}
 	}
 }
