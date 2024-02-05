@@ -29,6 +29,7 @@ namespace DevCircle.Todo.Application.Extensions
 			{
 				x.AddProfile(typeof(TodoItemMappings));
 			});
+
 			return services;
 		}
 	}

@@ -16,6 +16,8 @@ namespace DevCircle.Todo.Application.Mapping
             CreateMap<TodoItem, TodoItemDTO>()
                 .ReverseMap();
 
+            CreateMap<UserDTO, User>()
+                .ReverseMap();
         }
     }
 }
