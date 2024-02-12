@@ -14,7 +14,7 @@ namespace DevCircle_Todo.API.Database
 		{
         }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<User>();
 			modelBuilder.Entity<TodoItem>();

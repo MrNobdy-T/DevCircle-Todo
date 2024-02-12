@@ -6,9 +6,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  
   <ItemGroup>
-    <ProjectReference Include="..\DevCircle.Todo.View.Client\DevCircle.Todo.View.Client.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.1" />
+    <PackageReference Include="MudBlazor" Version="6.*" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <ProjectReference Include="..\DevCircle.Todo.API.Client\DevCircle.Todo.API.Client.csproj" />
+  </ItemGroup>
+  
 </Project>

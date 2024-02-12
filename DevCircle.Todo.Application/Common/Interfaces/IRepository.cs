@@ -12,7 +12,9 @@ namespace DevCircle.Todo.Database.Interfaces
 
 		Task Delete(T entity);
 
-		Task<T> GetEntity(Func<T, bool> predicate);
+		Task Update(T entity);
+
+		Task<IEnumerable<T>> GetEntities(Func<T, bool> predicate);
 
 		Task<IEnumerable<T>> GetAll();
 	}

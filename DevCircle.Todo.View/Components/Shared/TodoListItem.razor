@@ -1,0 +1,21 @@
+﻿@using DevCircle.Todo.Application.Mapping.DTOs
+@rendermode InteractiveServer
+
+<MudListItem Disabled="@false" OnClick="ClickHandler">
+	<!-- Customize the content of your list item here -->
+	<MudText Typo="Typo.h6">@TodoItem.Title</MudText>
+		<MudText Typo="Typo.subtitle1">Created: @TodoItem.CreationDate.Date.ToString()</MudText>
+		<MudText Typo="Typo.subtitle1">Due: @TodoItem.DueTime.Date.ToString()</MudText>
+		<MudText Typo="Typo.subtitle1">@TodoItem.Owner</MudText>
+</MudListItem>
+
+	@code {
+	[Parameter]
+	public TodoItemDTO TodoItem { get; set; } = null!;
+
+	[Parameter]
+	public RenderFragment? ChildContent { get; set; }
+
+	[Parameter]
+	public Action? ClickHandler { get; set; }
+}

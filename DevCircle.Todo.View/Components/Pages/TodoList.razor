@@ -1,0 +1,58 @@
+﻿@page "/todo"
+@rendermode InteractiveServer
+
+@using DevCircle.Todo.API.Client.Services
+@using DevCircle.Todo.Application.Mapping.DTOs
+@using DevCircle.Todo.View.Components.Shared
+@inject IJSRuntime JS
+@inject TodoItemService _todoService
+<PageTitle>Todos</PageTitle>
+
+<MudContainer>
+	<MudPaper Class="pa-5 ma-2" Outlined="true" Square="true">
+		<div class="d-flex">
+			<h1>Todos</h1>
+			<MudButton Variant="Variant.Filled"
+					   Size="Size.Medium"
+					   class="ml-auto">
+				Add
+			</MudButton>
+		</div>
+	</MudPaper>
+	<MudPaper>
+		<div>
+			@if (_todoItems is null || _todoItems.Count() == 0)
+			{
+				<MudText Style="ruby-align">Nothing left to do ;)</MudText>
+			}
+			else
+			{
+				@foreach (var item in _todoItems)
+				{
+					<MudButton>
+						<TodoListItem TodoItem="item" ClickHandler="@(async () => await NavigateToItem(item))" />
+					</MudButton>
+				}
+			}
+		</div>
+	</MudPaper>
+</MudContainer>
+@code {
+	private IEnumerable<TodoItemDTO> _todoItems = null!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var result = await _todoService.GetAll();
+		_todoItems = result.TodoItemDTOs;
+		await base.OnInitializedAsync();
+	}
+
+	private void Test()
+	{
+		Console.WriteLine("Test");
+	}
+
+	private async Task NavigateToItem(TodoItemDTO item)
+	{
+	}
+}

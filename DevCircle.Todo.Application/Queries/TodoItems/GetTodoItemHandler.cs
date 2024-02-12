@@ -28,18 +28,18 @@ namespace DevCircle.Todo.Application.Queries.TodoItems
 			if (request.TodoItemProxy == null)
 			{
 				var allTodos = await _repo.GetAll();
-				var todoDTOs = _mapper.Map<IEnumerable<TodoItemDTO>>(allTodos);
+				var allTodoMapedDTOs = _mapper.Map<IEnumerable<TodoItemDTO>>(allTodos);
 				return new GetTodoItemResponse()
 				{
-					TodoItemDTOs = todoDTOs
+					TodoItemDTOs = allTodoMapedDTOs
 				};
 			}
 
-			var todoItem = await _repo.GetEntity(x => x.Id == request.TodoItemProxy.Id);
-			var todoDTO = _mapper.Map<TodoItemDTO>(todoItem);
+			var todoItems = await _repo.GetEntities(x => x.Id == request.TodoItemProxy.Id);
+			var mappedTodoDTOs = _mapper.Map<IEnumerable<TodoItemDTO>>(todoItems);
 			return new GetTodoItemResponse()
 			{
-				TodoItemDTOs = new List<TodoItemDTO> { todoDTO }
+				TodoItemDTOs = mappedTodoDTOs
 			};
 		}
 	}

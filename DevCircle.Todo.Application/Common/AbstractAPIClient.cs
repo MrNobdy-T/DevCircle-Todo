@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Flurl;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,14 @@ namespace DevCircle.Todo.Application.Common
 {
 	public abstract class AbstractAPIClient
 	{
-		public string BaseURL{ get; set; }
+		protected Url BaseURL{ get; }
+
+        public AbstractAPIClient(IConfiguration config)
+        {
+            BaseURL = config
+                .GetSection("ClientSettings")
+                .GetSection("API-URL").Value!
+                .AppendPathSegment("api");
+        }
     }
 }

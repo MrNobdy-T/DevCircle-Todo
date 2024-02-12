@@ -32,16 +32,21 @@ namespace DevCircle.Todo.Database.Repositories
 
 		public Task<IEnumerable<TodoItem>> GetAll()
 		{
-			var todoItems = _dbContext.TodoItems.ToList();
+			var todoItems = _dbContext.TodoItems;
 
 			return Task.FromResult<IEnumerable<TodoItem>>(todoItems);
 		}
 
-		public Task<TodoItem> GetEntity(Func<TodoItem, bool> predicate)
+		public Task<IEnumerable<TodoItem>> GetEntities(Func<TodoItem, bool> predicate)
 		{
-			var entity = _dbContext.TodoItems.Where((x) => predicate(x)).FirstOrDefault();
+			var entity = _dbContext.TodoItems.Where((x) => predicate(x));
 
-			return Task.FromResult(entity!);
+			return Task.FromResult<IEnumerable<TodoItem>>(entity);
 		}
-	}
+
+        public Task Update(TodoItem entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

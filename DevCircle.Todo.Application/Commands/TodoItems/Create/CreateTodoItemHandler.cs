@@ -25,7 +25,6 @@ namespace DevCircle.Todo.Application.Commands
 		{
 			var entity = _mapper.Map<TodoItem>(request.TodoItemDTO);
 			await _repo.Add(entity);
-
 			return new CreateTodoItemResponse();
 		}
 	}
