@@ -22,5 +22,10 @@ namespace DevCircle.Todo.API.Client.Services
         {
             return await BaseURL.AppendPathSegments("TodoItem").AppendPathSegment("Get").GetJsonAsync<GetTodoItemResponse>();
         }
+
+        public async Task<GetTodoItemResponse> Get(GetTodoItemRequest request)
+        {
+            return await BaseURL.AppendPathSegment("TodoItem").AppendPathSegment("Get").GetJsonAsync<GetTodoItemResponse>();
+        }
 	}
 }

@@ -5,7 +5,10 @@
 	<!-- Customize the content of your list item here -->
 	<MudText Typo="Typo.h6">@TodoItem.Title</MudText>
 		<MudText Typo="Typo.subtitle1">Created: @TodoItem.CreationDate.Date.ToString()</MudText>
-		<MudText Typo="Typo.subtitle1">Due: @TodoItem.DueTime.Date.ToString()</MudText>
+	@if (TodoItem.DueTime.HasValue)
+	{
+		<MudText Typo="Typo.subtitle1">Due: @TodoItem.DueTime.Value.Date.ToString()</MudText>
+	}
 		<MudText Typo="Typo.subtitle1">@TodoItem.Owner</MudText>
 </MudListItem>
 

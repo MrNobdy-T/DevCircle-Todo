@@ -1,0 +1,50 @@
+﻿@page "/todo/create"
+@using DevCircle.Todo.API.Client.Services
+@using DevCircle.Todo.Application.Mapping.DTOs
+@using DevCircle.Todo.View.Components.Shared
+@using NodaTime
+@rendermode InteractiveServer
+@inject TodoItemService _todoService
+
+<MudContainer>
+	<MudPaper Class="pa-5 ma-2" Outlined="true" Square="true">
+		<div class="d-flex">
+			<h1>Create a Todo</h1>
+		</div>
+	</MudPaper>
+	<MudPaper>
+		<button @onclick=@(() => Test())>Test</button>
+		<MudGrid Spacing="2">
+			<MudItem Class="d-flex justify-start flex-grow-1 gap-4">
+				<MudGrid>
+					<MudItem>
+						<InputField @bind-Value="itemDTO.Title" Title="Title" />
+					</MudItem>
+					<MudItem>
+						<DateInputField Title="Creation Date" @bind-Value=itemDTO.CreationDate IsDisabled=false/>
+					</MudItem>
+					<MudItem>
+						<NullableDateInputField Title="Due date" @bind-Value="itemDTO.DueTime" ></NullableDateInputField>
+					</MudItem>
+				</MudGrid>
+			</MudItem>
+		</MudGrid>
+	</MudPaper>
+</MudContainer>
+
+@code {
+	TodoItemDTO itemDTO = new();
+
+
+	protected override void OnInitialized()
+	{
+		itemDTO.CreationDate = SystemClock.Instance.GetCurrentInstant().InUtc().LocalDateTime;
+		itemDTO.DueTime = LocalDateTime.MinIsoValue;
+		base.OnInitialized();
+	}
+
+	private void Test()
+	{
+		Console.WriteLine("Test");
+	}
+}

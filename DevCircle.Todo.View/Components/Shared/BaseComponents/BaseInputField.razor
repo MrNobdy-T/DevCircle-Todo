@@ -1,0 +1,24 @@
+﻿@typeparam T
+
+@code {
+	[Parameter]
+	public string Title { get; set; }
+
+	[Parameter]
+	public bool IsDisabled { get; set; } = false;
+
+	private T _value;
+
+	[Parameter]
+	public T Value
+	{
+		get => _value;
+		set
+		{
+			_value = value;
+		}
+	}
+
+	[Parameter]
+	public EventCallback<T> ValueChanged { get; set; }
+}

@@ -1,0 +1,40 @@
+﻿@using DevCircle.Todo.Application.Mapping.ValueConverter
+@using DevCircle.Todo.View.Components.Shared.BaseComponents
+@using NodaTime
+@rendermode InteractiveServer
+@inherits BaseInputField<LocalDateTime?>
+
+<MudContainer Class="d-flex flex-grow-1 gap-3" Elevation="0">
+	<MudGrid>
+		<MudItem>
+			<MudText Class="py-4 d-flex flex-0">@Title:</MudText>
+			</MudItem>
+			<MudItem>
+				@if (Value.HasValue)
+			{
+				<MudDatePicker @bind-Date="DisplayedValue" Disabled="@IsDisabled" Editable="true" Variant="Variant.Outlined" Class="d-flex" />
+			}
+		</MudItem>
+	</MudGrid>
+</MudContainer>
+
+@code {
+	private DateTime? _displayedValue;
+
+	public DateTime? DisplayedValue
+	{
+		get => _displayedValue;
+		set
+		{
+			_displayedValue = value;
+			this.Value = DateTimeConverter.ConvertToNodaTime(value);
+			this.ValueChanged.InvokeAsync(Value);
+		}
+	}
+
+	protected override Task OnInitializedAsync()
+	{
+		return base.OnInitializedAsync();
+	}
+}
+
