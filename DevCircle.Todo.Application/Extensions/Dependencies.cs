@@ -1,4 +1,8 @@
 ﻿using DevCircle.Todo.Application.Mapping;
+using DevCircle.Todo.Application.Mapping.DTOs;
+using DevCircle.Todo.Application.Validation.TodoItem;
+using DevCircle.Todo.Application.Validation.User;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -28,7 +32,16 @@ namespace DevCircle.Todo.Application.Extensions
 			services.AddAutoMapper((x) =>
 			{
 				x.AddProfile(typeof(TodoItemMappings));
+				x.AddProfile(typeof(UserMapping));
 			});
+
+			return services;
+		}
+
+		public static IServiceCollection AddValidators(this IServiceCollection services)
+		{
+			services.AddScoped<IValidator<TodoItemDTO>, TodoItemValidator>();
+			services.AddScoped<IValidator<UserDTO>, UserValidator>();
 
 			return services;
 		}

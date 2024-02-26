@@ -1,50 +1,98 @@
 ﻿@page "/todo/create"
+@using Blazored.FluentValidation
 @using DevCircle.Todo.API.Client.Services
 @using DevCircle.Todo.Application.Mapping.DTOs
 @using DevCircle.Todo.View.Components.Shared
 @using NodaTime
 @rendermode InteractiveServer
 @inject TodoItemService _todoService
+@inject UserService _userService
 
-<MudContainer>
-	<MudPaper Class="pa-5 ma-2" Outlined="true" Square="true">
-		<div class="d-flex">
-			<h1>Create a Todo</h1>
-		</div>
-	</MudPaper>
-	<MudPaper>
-		<button @onclick=@(() => Test())>Test</button>
-		<MudGrid Spacing="2">
-			<MudItem Class="d-flex justify-start flex-grow-1 gap-4">
+<MudContainer MaxWidth="MaxWidth.Large">
+	<MudGrid>
+		<MudItem xs="12">
+			<MudPaper Class="pa-5" Outlined="true" Square="true">
+				<h1>Create a Todo</h1>
+			</MudPaper>
+		</MudItem>
+		<MudItem xs="12">
+			<EditForm Model="_itemDTO" OnSubmit="@SubmitFormAsync">
+				<FluentValidationValidator DisableAssemblyScanning="true" @ref="@_validator" />
+				<DataAnnotationsValidator />
+				<MudPaper>
+					<MudGrid Spacing="2">
+						<MudItem Class="d-flex justify-start flex-grow-1 gap-4">
+							<MudGrid>
+								<MudItem>
+									<InputField @bind-Value="_itemDTO.Title" Title="Title"
+												For="@(() => _itemDTO.Title)" />
+								</MudItem>
+								<MudItem>
+									<NullableDateInputField Title="Due date" @bind-Value="_itemDTO.DueTime"
+															For="@(() => _itemDTO.DueTime)" />
+								</MudItem>
+								<MudItem>
+									<DateInputField Title="Creation Date" @bind-Value=_itemDTO.CreationDate
+													IsDisabled=true
+													For="@(() => _itemDTO.CreationDate)" />
+								</MudItem>
+								<MudItem>
+									<MudSelect T="UserDTO" Label="Owner" AnchorOrigin="Origin.BottomCenter">
+										@if (_userDTOs.Count() <= 0)
+										{
+
+										}
+										else
+										{
+											@foreach (var user in _userDTOs)
+											{
+											}
+										}
+									</MudSelect>
+								</MudItem>
+							</MudGrid>
+						</MudItem>
+					</MudGrid>
+				</MudPaper>
 				<MudGrid>
-					<MudItem>
-						<InputField @bind-Value="itemDTO.Title" Title="Title" />
+					<MudItem xs="12">
+						<MudText Typo="Typo.h5" Class="pa-1">Description</MudText>
 					</MudItem>
-					<MudItem>
-						<DateInputField Title="Creation Date" @bind-Value=itemDTO.CreationDate IsDisabled=false/>
-					</MudItem>
-					<MudItem>
-						<NullableDateInputField Title="Due date" @bind-Value="itemDTO.DueTime" ></NullableDateInputField>
+					<MudItem xs="12">
+						<MudPaper Outlined="true">
+							<MudTextField T="@string" @bind-Text="@_itemDTO.Description" FullWidth=true AutoGrow="@true" Lines="5"></MudTextField>
+						</MudPaper>
 					</MudItem>
 				</MudGrid>
-			</MudItem>
-		</MudGrid>
-	</MudPaper>
+				<MudButton ButtonType="@ButtonType.Submit">Submit</MudButton>
+			</EditForm>
+		</MudItem>
+
+	</MudGrid>
 </MudContainer>
 
 @code {
-	TodoItemDTO itemDTO = new();
+	private TodoItemDTO _itemDTO = new();
+	private IEnumerable<UserDTO> _userDTOs = null!;
+	private FluentValidationValidator? _validator;
 
 
-	protected override void OnInitialized()
+	protected override async void OnInitialized()
 	{
-		itemDTO.CreationDate = SystemClock.Instance.GetCurrentInstant().InUtc().LocalDateTime;
-		itemDTO.DueTime = LocalDateTime.MinIsoValue;
+		_itemDTO.CreationDate = SystemClock.Instance.GetCurrentInstant().InUtc().LocalDateTime;
+		var response = await _userService.GetAll();
+		_userDTOs = response.UserDTOs;
 		base.OnInitialized();
 	}
 
-	private void Test()
+	public async Task SubmitFormAsync()
 	{
-		Console.WriteLine("Test");
+		if (await _validator!.ValidateAsync())
+		{
+			await _todoService.Create(new()
+				{
+					TodoItemDTO = _itemDTO
+				});
+		}
 	}
 }

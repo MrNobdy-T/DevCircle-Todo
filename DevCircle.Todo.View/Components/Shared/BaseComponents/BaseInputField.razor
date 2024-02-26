@@ -1,4 +1,5 @@
-﻿@typeparam T
+﻿@using System.Linq.Expressions
+@typeparam T
 
 @code {
 	[Parameter]
@@ -21,4 +22,7 @@
 
 	[Parameter]
 	public EventCallback<T> ValueChanged { get; set; }
+
+	[Parameter]
+	public Expression<Func<T>>? For { get; set; }
 }

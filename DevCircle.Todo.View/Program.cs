@@ -1,7 +1,7 @@
 using DevCircle.Todo.View.Components;
 using MudBlazor.Services;
 using DevCircle.Todo.API.Client.Extensions;
-using Microsoft.AspNetCore.Builder.Extensions;
+using DevCircle.Todo.Application.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +11,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddMudServices();
 builder.Services.AddAPIServices();
+builder.Services.AddValidators();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

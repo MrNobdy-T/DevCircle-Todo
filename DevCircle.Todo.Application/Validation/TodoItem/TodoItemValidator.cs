@@ -16,6 +16,17 @@ namespace DevCircle.Todo.Application.Validation.TodoItem
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("A title must be set!");
+
+            RuleFor(x => x.DueTime)
+                .GreaterThan((x) => x.CreationDate)
+                .When(x => x.DueTime.HasValue)
+                .WithMessage("The due date can't be earlier than the creation date!");
+
+            RuleFor(x => x.Owner)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("A owner must be assigned!");
+
         }
     }
 }

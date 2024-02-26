@@ -7,21 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Components\Pages\Todo\TodoCreate.razor.css" />
     <None Remove="Components\Shared\InputField.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Components\Pages\Todo\TodoCreate.razor.css" />
     <Content Include="Components\Shared\InputField.razor.css" />
   </ItemGroup>
 
   
   <ItemGroup>
+    <PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
     <PackageReference Include="MudBlazor" Version="6.*" />
   </ItemGroup>
 
   
   <ItemGroup>
     <ProjectReference Include="..\DevCircle.Todo.API.Client\DevCircle.Todo.API.Client.csproj" />
+    <ProjectReference Include="..\DevCircle.Todo.Application\DevCircle.Todo.Application.csproj" />
   </ItemGroup>
   
 </Project>

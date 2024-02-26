@@ -9,12 +9,13 @@
 			<MudText Class="py-4 d-flex flex-0">@Title:</MudText>
 			</MudItem>
 			<MudItem>
-				<MudInput T = "string" @bind-Value="@DisplayedValue" Disabled="@IsDisabled" Variant="Variant.Outlined" />
-			</MudItem>
-		</MudGrid>
-	</MudContainer>
+				<MudInput T="string" @bind-Value="@DisplayedValue" Disabled="@IsDisabled" Variant="Variant.Outlined" For="@For" />
+				<ValidationMessage For="@For"/>
+		</MudItem>
+	</MudGrid>
+</MudContainer>
 
-	@code {
+@code {
 	private string _displayedValue;
 	public string DisplayedValue
 	{

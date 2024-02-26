@@ -24,6 +24,11 @@ namespace DevCircle.Todo.Database.Repositories
 			await _dbContext.SaveChangesAsync();
 		}
 
+		public async Task<bool> Any(Func<TodoItem, bool> predicate)
+		{
+			return await _dbContext.TodoItems.AnyAsync(x => predicate(x));
+		}
+
 		public async Task Delete(TodoItem entity)
 		{
 			_dbContext.TodoItems.Remove(entity);

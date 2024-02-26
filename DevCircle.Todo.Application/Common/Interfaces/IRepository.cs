@@ -17,5 +17,7 @@ namespace DevCircle.Todo.Database.Interfaces
 		Task<IEnumerable<T>> GetEntities(Func<T, bool> predicate);
 
 		Task<IEnumerable<T>> GetAll();
+
+		Task<bool> Any(Func<T, bool> predicate);
 	}
 }

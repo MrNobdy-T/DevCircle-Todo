@@ -16,6 +16,7 @@ namespace DevCircle.Todo.Database.Extensions
 		public static IServiceCollection AddDatabaseServices(this IServiceCollection services)
 		{
 			services.AddTransient<IRepository<TodoItem>, TodoItemRepository>();
+			services.AddTransient<IRepository<User>, UserRepository>();
 			services.AddTransient<IApplicationDbContext, DatabaseContext>();
 
 			return services;

@@ -15,6 +15,7 @@ namespace DevCircle.Todo.API.Client.Extensions
 	{
 		public static IServiceCollection AddAPIServices(this IServiceCollection services)
 		{
+			// Reads the json of the executing assembly
 			var config = new ConfigurationBuilder()
 					.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 					.Build();
@@ -23,7 +24,10 @@ namespace DevCircle.Todo.API.Client.Extensions
 			{
 				return new TodoItemService(config);
 			});
-
+			services.AddTransient(x =>
+			{
+				return new UserService(config);
+			});
 
 			return services;
 		}

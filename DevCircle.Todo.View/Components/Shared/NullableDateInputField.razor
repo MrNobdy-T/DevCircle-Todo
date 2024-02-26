@@ -10,10 +10,12 @@
 			<MudText Class="py-4 d-flex flex-0">@Title:</MudText>
 			</MudItem>
 			<MudItem>
-				@if (Value.HasValue)
-			{
+
 				<MudDatePicker @bind-Date="DisplayedValue" Disabled="@IsDisabled" Editable="true" Variant="Variant.Outlined" Class="d-flex" />
-			}
+				@if (For is not null)
+				{
+					<ValidationMessage For="@For" />
+				}
 		</MudItem>
 	</MudGrid>
 </MudContainer>

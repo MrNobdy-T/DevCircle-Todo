@@ -9,12 +9,16 @@
 	<MudGrid>
 		<MudItem>
 			<MudText Class="py-4 d-flex flex-0">@Title:</MudText>
+			</MudItem>
+			<MudItem>
+				<MudDatePicker @bind-Date="DisplayedValue" Disabled="@IsDisabled" Editable="true" Variant="Variant.Outlined" Class="d-flex" />
+			@if(For is not null)
+			{
+				<ValidationMessage For="@For"/>
+			}
 		</MudItem>
-		<MudItem>
-			<MudDatePicker @bind-Date="DisplayedValue" Disabled="@IsDisabled" Editable="true" Variant="Variant.Outlined" Class="d-flex" />
-		</MudItem>
-	</MudGrid>
-</MudContainer>
+		</MudGrid>
+	</MudContainer>
 
 	@code {
 	protected DateTime? _displayedTime;

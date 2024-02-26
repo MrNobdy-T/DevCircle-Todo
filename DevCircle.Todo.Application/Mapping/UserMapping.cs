@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 
 namespace DevCircle.Todo.Application.Mapping
 {
-	public class TodoItemMappings : Profile
+	public class UserMapping : Profile
 	{
-        public TodoItemMappings()
+        public UserMapping()
         {
-            CreateMap<TodoItem, TodoItemDTO>()
+            CreateMap<User, UserDTO>()
+                .ReverseMap();
+
+            CreateMap<UserDTO, User>()
                 .ReverseMap();
         }
     }
