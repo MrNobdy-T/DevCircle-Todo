@@ -12,7 +12,7 @@
 	<MudGrid>
 		<MudItem xs="12">
 			<MudPaper Class="pa-5" Outlined="true" Square="true">
-				<h1>Create a Todo</h1>
+				<MudText Typo="Typo.h2">Create a Todo</MudText>
 			</MudPaper>
 		</MudItem>
 		<MudItem xs="12">
@@ -37,16 +37,13 @@
 													For="@(() => _itemDTO.CreationDate)" />
 								</MudItem>
 								<MudItem>
-									<MudSelect T="UserDTO" Label="Owner" AnchorOrigin="Origin.BottomCenter">
-										@if (_userDTOs.Count() <= 0)
+									<MudSelect Class="pa-5" T="UserDTO" Label="Owner" 
+										AnchorOrigin="Origin.BottomCenter" 
+										For="@(() => _itemDTO.Owner)"
+										@bind-Value=@_itemDTO.Owner>
+										@foreach (UserDTO user in _userDTOs)
 										{
-
-										}
-										else
-										{
-											@foreach (var user in _userDTOs)
-											{
-											}
+											<MudSelectItem T="UserDTO" Value="user" >@user.Name</MudSelectItem>
 										}
 									</MudSelect>
 								</MudItem>
@@ -73,7 +70,7 @@
 
 @code {
 	private TodoItemDTO _itemDTO = new();
-	private IEnumerable<UserDTO> _userDTOs = null!;
+	private IEnumerable<UserDTO> _userDTOs = Enumerable.Empty<UserDTO>();
 	private FluentValidationValidator? _validator;
 
 
@@ -94,5 +91,10 @@
 					TodoItemDTO = _itemDTO
 				});
 		}
+	}
+
+	private async Task SelectOwner(UserDTO userDTO)
+	{
+
 	}
 }

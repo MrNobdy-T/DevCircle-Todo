@@ -1,5 +1,6 @@
 ﻿using DevCircle.Todo.Application.Mapping;
 using DevCircle.Todo.Application.Mapping.DTOs;
+using DevCircle.Todo.Application.Queries.Users;
 using DevCircle.Todo.Application.Validation.TodoItem;
 using DevCircle.Todo.Application.Validation.User;
 using FluentValidation;
@@ -20,7 +21,7 @@ namespace DevCircle.Todo.Application.Extensions
 		{
 			services.AddMediatR((x) =>
 			{
-				x.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+				x.RegisterServicesFromAssemblies(typeof(Hook).Assembly);
 			});
 
 			return services;

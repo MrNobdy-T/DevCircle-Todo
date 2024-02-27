@@ -31,7 +31,10 @@ namespace DevCircle.Todo.Application.Commands.Users
 			}
 			if (await _repository.Any(x => x.Name == user.Name && x.Email == user.Email))
 			{
-				throw new EntityExistsException(nameof(user));
+				return new CreateUserResponse()
+				{
+					 Exception = new EntityExistsException(nameof(user))
+				};
 			}
 
 			await _repository.Add(user);

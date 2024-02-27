@@ -18,14 +18,14 @@ namespace DevCircle_Todo.API.Controllers
 			_mediator = mediator;
 		}
 
-		[HttpPost]
-		public async Task<CreateTodoItemResponse> Create([FromBody] CreateTodoItemRequest request)
+		[HttpGet]
+		public async Task<GetTodoItemResponse> Get([FromQuery] GetTodoItemRequest request)
 		{
 			return await _mediator.Send(request);
 		}
 
-		[HttpGet]
-		public async Task<GetTodoItemResponse> Get([FromQuery] GetTodoItemRequest request)
+		[HttpPost]
+		public async Task<CreateTodoItemResponse> Create([FromBody] CreateTodoItemRequest request)
 		{
 			return await _mediator.Send(request);
 		}

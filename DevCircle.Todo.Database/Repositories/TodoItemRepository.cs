@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using DevCircle.Todo.Database.Interfaces;
@@ -24,9 +25,9 @@ namespace DevCircle.Todo.Database.Repositories
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task<bool> Any(Func<TodoItem, bool> predicate)
+		public async Task<bool> Any(Expression<Func<TodoItem, bool>> predicate)
 		{
-			return await _dbContext.TodoItems.AnyAsync(x => predicate(x));
+			return await _dbContext.TodoItems.AnyAsync(predicate);
 		}
 
 		public async Task Delete(TodoItem entity)

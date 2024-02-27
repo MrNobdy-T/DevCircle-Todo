@@ -1,0 +1,15 @@
+﻿@using DevCircle.Todo.Application.Mapping.DTOs
+@rendermode InteractiveServer
+
+<MudListItem Disabled="@false" OnClick="ClickHandler" Cl>
+	<MudText Typo="Typo.h6">@UserDTO.Name</MudText>
+		<MudText Typo="Typo.subtitle1">Email: @UserDTO.Email</MudText>
+	</MudListItem>
+
+	@code {
+	[Parameter]
+	public UserDTO UserDTO { get; set; } = null!;
+
+	[Parameter]
+	public Action? ClickHandler { get; set; }
+}

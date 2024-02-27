@@ -1,0 +1,46 @@
+﻿@page "/user"
+@rendermode InteractiveServer
+@using DevCircle.Todo.API.Client.Services
+@using DevCircle.Todo.Application.Mapping.DTOs
+@inject NavigationManager NavManager;
+@inject UserService _userService
+<PageTitle>Users</PageTitle>
+
+<MudContainer>
+	<MudPaper Class="pa-5 ma-2" Outlined="true" Square="true">
+		<div class="d-flex">
+			<MudText Typo="Typo.h2">Users</MudText>
+			<MudButton Variant="Variant.Filled"
+					   Size="Size.Medium"
+					   class="ml-auto"
+					   OnClick="@(() => NavManager.NavigateTo("/user/create"))">
+				Add
+			</MudButton>
+		</div>
+	</MudPaper>
+	<MudPaper>
+		<MudList Clickable=true>
+			@foreach (var user in _userDTOs)
+			{
+				<UserListItem UserDTO="user" ClickHandler="@(async () => await NavigateToItem(user))" />
+			}
+		</MudList>
+
+	</MudPaper>
+</MudContainer>
+@code {
+	private IEnumerable<UserDTO> _userDTOs = Enumerable.Empty<UserDTO>();
+
+	protected override async Task OnInitializedAsync()
+	{
+		var result = await _userService.GetAll();
+		_userDTOs = result.UserDTOs;
+		await base.OnInitializedAsync();
+	}
+
+	private async Task NavigateToItem(UserDTO dto)
+	{
+
+	}
+
+}

@@ -9,7 +9,7 @@
 <MudContainer>
 	<MudPaper Class="pa-5 ma-2" Outlined="true" Square="true">
 		<div class="d-flex">
-			<h1>Todos</h1>
+			<MudText Typo="Typo.h2">Todos</MudText>
 			<MudButton Variant="Variant.Filled"
 					   Size="Size.Medium"
 					   class="ml-auto"
@@ -26,12 +26,12 @@
 			}
 			else
 			{
-				@foreach (var item in _todoItems)
-				{
-					<MudButton>
+				<MudList Clickable=true>
+					@foreach (var item in _todoItems)
+					{
 						<TodoListItem TodoItem="item" ClickHandler="@(async () => await NavigateToItem(item))" />
-					</MudButton>
-				}
+					}
+				</MudList>
 			}
 		</div>
 	</MudPaper>

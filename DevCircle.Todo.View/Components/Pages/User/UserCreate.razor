@@ -1,0 +1,79 @@
+﻿@page "/user/create"
+@using Blazored.FluentValidation
+@using DevCircle.Todo.API.Client.Services
+@using DevCircle.Todo.Application.Commands.Users
+@using DevCircle.Todo.Application.Mapping.DTOs
+@using DevCircle.Todo.Application.Extensions
+@using DevCircle.Todo.Domain.Exceptions
+@using DevCircle.Todo.View.Components.Shared
+@using NodaTime
+@rendermode InteractiveServer
+@inject UserService _userService
+@inject NavigationManager _navManager;
+@inject IDialogService _dialogService
+
+<MudContainer MaxWidth="MaxWidth.Large">
+	<MudGrid>
+		<MudItem xs="12">
+			<MudPaper Class="pa-5" Outlined="true" Square="true">
+				<MudText Typo="Typo.h2">Create a User</MudText>
+			</MudPaper>
+		</MudItem>
+		<MudItem xs="12">
+			<EditForm Model="_userDTO" OnSubmit="@SubmitFormAsync">
+				<FluentValidationValidator DisableAssemblyScanning="true" @ref="@_validator" />
+				<DataAnnotationsValidator />
+				<MudPaper>
+					<MudGrid Spacing="2">
+						<MudItem Class="d-flex justify-start flex-grow-1 gap-4">
+							<MudGrid>
+								<MudItem>
+									<InputField @bind-Value="_userDTO.Name" Title="Name"
+												For="@(() => _userDTO.Name)" />
+								</MudItem>
+								<MudItem>
+									<InputField Title="E-Mail" @bind-Value="_userDTO.Email"
+												For="@(() => _userDTO.Email)" />
+								</MudItem>
+							</MudGrid>
+						</MudItem>
+					</MudGrid>
+				</MudPaper>
+
+				<MudButton Class="mt-5" ButtonType="@ButtonType.Submit">Submit</MudButton>
+			</EditForm>
+		</MudItem>
+
+	</MudGrid>
+</MudContainer>
+
+@code {
+	private UserDTO _userDTO = new();
+	private FluentValidationValidator? _validator;
+
+	public async Task SubmitFormAsync()
+	{
+		if (await _validator!.ValidateAsync())
+		{
+			CreateUserResponse response = await _userService.Create(new CreateUserRequest()
+				{
+					UserDTO = _userDTO
+				});
+			if (!response.HasErrorOccured())
+			{
+				_navManager.NavigateTo("/user");
+			}
+
+
+			var options = new DialogOptions()
+				{
+					Position = DialogPosition.TopCenter,
+					CloseOnEscapeKey = true
+				};
+			var parameters = new DialogParameters<ErrorDialog>();
+			parameters.Add("Message", "This user already exists!");
+
+			await _dialogService.ShowAsync<ErrorDialog>("Error", parameters, options);
+		}
+	}
+}

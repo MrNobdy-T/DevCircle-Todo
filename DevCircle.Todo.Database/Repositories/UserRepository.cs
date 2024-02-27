@@ -1,8 +1,10 @@
 ﻿using DevCircle.Todo.Database.Interfaces;
 using DevCircle.Todo.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,29 +12,38 @@ namespace DevCircle.Todo.Database.Repositories
 {
 	internal class UserRepository : IRepository<User>
 	{
-		public Task Add(User entity)
+		private readonly IApplicationDbContext _dbContext;
+
+		public UserRepository(IApplicationDbContext dbContext)
 		{
-			throw new NotImplementedException();
+			_dbContext = dbContext;
 		}
 
-		public Task<bool> Any(Func<User, bool> predicate)
+		public async Task Add(User entity)
 		{
-			throw new NotImplementedException();
+			_dbContext.Users.Add(entity);
+			await _dbContext.SaveChangesAsync();
+		}
+
+		public async Task<bool> Any(Expression<Func<User, bool>> predicate)
+		{
+			return await _dbContext.Users.AnyAsync(predicate);
 		}
 
 		public Task Delete(User entity)
 		{
-			throw new NotImplementedException();
+			_dbContext.Users.Remove(entity);
+			return Task.CompletedTask;
 		}
 
 		public Task<IEnumerable<User>> GetAll()
 		{
-			throw new NotImplementedException();
+			return Task.FromResult<IEnumerable<User>>(_dbContext.Users);
 		}
 
 		public Task<IEnumerable<User>> GetEntities(Func<User, bool> predicate)
 		{
-			throw new NotImplementedException();
+			return Task.FromResult<IEnumerable<User>>(_dbContext.Users.Where(x => predicate(x)));
 		}
 
 		public Task Update(User entity)
