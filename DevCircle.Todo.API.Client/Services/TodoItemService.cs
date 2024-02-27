@@ -1,4 +1,5 @@
 ﻿using DevCircle.Todo.Application.Commands;
+using DevCircle.Todo.Application.Commands.TodoItems.Update;
 using DevCircle.Todo.Application.Common;
 using DevCircle.Todo.Application.Queries.TodoItems;
 using Flurl;
@@ -32,6 +33,11 @@ namespace DevCircle.Todo.API.Client.Services
 		public async Task<GetTodoItemResponse> Get(GetTodoItemRequest request)
 		{
 			return await new Url(BaseURL).AppendPathSegment("Get").SetQueryParam("request", request).GetJsonAsync<GetTodoItemResponse>();
+		}
+
+		public async Task<UpdateTodoItemResponse> Update(UpdateTodoItemRequest request)
+		{
+			return await new Url(BaseURL).AppendPathSegment("Update").PostJsonAsync(request).ReceiveJson<UpdateTodoItemResponse>();
 		}
 	}
 }

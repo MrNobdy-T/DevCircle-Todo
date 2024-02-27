@@ -20,7 +20,7 @@
 	</MudPaper>
 	<MudPaper>
 		<div>
-			@if (_todoItems is null || _todoItems.Count() == 0)
+			@if (_todoItems.Count() == 0)
 			{
 				<MudText Style="ruby-align">Nothing left to do ;)</MudText>
 			}
@@ -37,7 +37,9 @@
 	</MudPaper>
 </MudContainer>
 @code {
-	private IEnumerable<TodoItemDTO> _todoItems = null!;
+	private IEnumerable<TodoItemDTO> _todoItems = Enumerable.Empty<TodoItemDTO>();
+
+	private IEnumerable<TodoItemDTO> _filteredList = Enumerable.Empty<TodoItemDTO>();
 
 	protected override async Task OnInitializedAsync()
 	{

@@ -1,22 +1,25 @@
 ﻿@page "/todo/{Id}"
 @using Blazored.FluentValidation
 @using DevCircle.Todo.API.Client.Services
+@using DevCircle.Todo.Application.Commands.TodoItems.Update
 @using DevCircle.Todo.Application.Mapping.DTOs
 @using DevCircle.Todo.Application.Queries.TodoItems
 @using DevCircle.Todo.View.Components.Shared
 @inject TodoItemService _todoService
+@inject NavigationManager _navManager;
+@rendermode InteractiveServer
 
 <MudContainer MaxWidth="MaxWidth.Large">
 	<MudGrid>
 		<MudItem xs="12">
 			<MudPaper Class="pa-5" Outlined="true" Square="true">
 				<MudText Typo="Typo.h2">"@_itemDTO.Title"</MudText>
-			</MudPaper>
-		</MudItem>
-		<MudItem xs="12">
-			<MudPaper Class="pa-5">
-				<MudText Typo="Typo.h5">
-					Title: @_itemDTO.Title
+				</MudPaper>
+			</MudItem>
+			<MudItem xs="12">
+				<MudPaper Class="pa-5">
+					<MudText Typo="Typo.h5">
+						Title: @_itemDTO.Title
 				</MudText>
 				@if (_itemDTO.DueTime.HasValue)
 				{
@@ -33,8 +36,14 @@
 			</MudPaper>
 		</MudItem>
 		<MudItem xs="12">
-			<EditForm Model="_itemDTO" OnSubmit="@SubmitFormAsync">
-				<MudGrid>
+			<MudPaper>
+				<MudCheckBox T="bool" @bind-Value="@_itemDTO.IsCompleted" Label="Completed" Color="Color.Primary"></MudCheckBox>
+			</MudPaper>
+		</MudItem>
+		<MudItem xs="12">
+			<MudGrid>
+				@if (!string.IsNullOrEmpty(_itemDTO.Description))
+				{
 					<MudItem xs="12">
 						<MudText Typo="Typo.h5" Class="pa-1">Description</MudText>
 					</MudItem>
@@ -43,9 +52,11 @@
 							<MudTextField T="@string" @bind-Text="@_itemDTO.Description" FullWidth=true AutoGrow="@true" Disabled=true Lines="5"></MudTextField>
 						</MudPaper>
 					</MudItem>
-				</MudGrid>
-				<MudButton ButtonType="@ButtonType.Submit">Accept</MudButton>
-			</EditForm>
+				}
+
+			</MudGrid>
+
+			<MudButton ButtonType="@ButtonType.Submit" OnClick="SubmitAsync">Accept</MudButton>
 		</MudItem>
 
 	</MudGrid>
@@ -74,8 +85,13 @@
 		await base.OnInitializedAsync();
 	}
 
-	private async Task SubmitFormAsync()
+	private async Task SubmitAsync()
 	{
+		await _todoService.Update(new UpdateTodoItemRequest()
+			{
+				TodoItemProxy = _itemDTO
+			});
 
+		_navManager.NavigateTo("/");
 	}
 }

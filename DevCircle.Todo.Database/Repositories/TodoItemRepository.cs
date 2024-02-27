@@ -51,9 +51,35 @@ namespace DevCircle.Todo.Database.Repositories
 			return Task.FromResult<IEnumerable<TodoItem>>(entity);
 		}
 
-		public Task Update(TodoItem entity)
+		public async Task Update(TodoItem updatedItem)
 		{
-			throw new NotImplementedException();
+			var todoItem = _dbContext.TodoItems.FirstOrDefault(item => item.Id == updatedItem.Id);
+			if(todoItem == null)
+			{
+				throw new ArgumentNullException(nameof(todoItem));
+			}
+
+			// Update properties
+			if (!string.IsNullOrEmpty(updatedItem.Title))
+			{
+				todoItem.Title = updatedItem.Title;
+			}
+
+			if (updatedItem.Description != null)
+			{
+				todoItem.Description = updatedItem.Description;
+			}
+
+			if (updatedItem.DueTime != default)
+			{
+				todoItem.DueTime = updatedItem.DueTime;
+			}
+
+			todoItem.IsCompleted = updatedItem.IsCompleted;
+
+			// Save changes to the database
+			_dbContext.TodoItems.Update(todoItem);
+			await _dbContext.SaveChangesAsync();
 		}
 	}
 }
