@@ -14,14 +14,22 @@ namespace DevCircle.Todo.API.Client.Services
 {
 	public class UserService : AbstractAPIClient
 	{
-		public UserService(IConfiguration config) : base(config)
+		public UserService(Url baseUrl) : base(baseUrl)
 		{
 			this.BaseURL.AppendPathSegment("User");
 		}
 
 		public async Task<CreateUserResponse> Create(CreateUserRequest request)
 		{
-			return await new Url(BaseURL).AppendPathSegment("Create").PostJsonAsync(request).ReceiveJson<CreateUserResponse>();
+			try
+			{
+				await new Url(BaseURL).AppendPathSegment("Create").PostJsonAsync(request);
+			}
+			catch
+			{
+
+			}
+			return new CreateUserResponse();
 		}
 
 		public async Task<GetUserResponse> GetAll()

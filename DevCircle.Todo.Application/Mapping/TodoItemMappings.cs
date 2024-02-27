@@ -11,10 +11,14 @@ namespace DevCircle.Todo.Application.Mapping
 {
 	public class TodoItemMappings : Profile
 	{
-        public TodoItemMappings()
-        {
-            CreateMap<TodoItem, TodoItemDTO>()
-                .ReverseMap();
-        }
-    }
+		public TodoItemMappings()
+		{
+			CreateMap<TodoItem, TodoItemDTO>()
+				.ReverseMap();
+
+			CreateMap<TodoItemDTO, TodoItem>()
+				.ReverseMap();
+
+		}
+	}
 }

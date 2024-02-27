@@ -12,15 +12,15 @@
 			</MudItem>
 			<MudItem>
 				<MudDatePicker @bind-Date="DisplayedValue" Disabled="@IsDisabled" Editable="true" Variant="Variant.Outlined" Class="d-flex" />
-			@if(For is not null)
+				@if (For is not null)
 			{
-				<ValidationMessage For="@For"/>
+				<ValidationMessage For="@For" />
 			}
 		</MudItem>
-		</MudGrid>
-	</MudContainer>
+	</MudGrid>
+</MudContainer>
 
-	@code {
+@code {
 	protected DateTime? _displayedTime;
 	protected DateTime? DisplayedValue
 	{
@@ -28,8 +28,11 @@
 		set
 		{
 			_displayedTime = value;
-			this.Value = DateTimeConverter.ConvertToNodaTime(_displayedTime);
-			this.ValueChanged.InvokeAsync(Value);
+			if (!IsDisabled)
+			{
+				this.Value = DateTimeConverter.ConvertToNodaTime(_displayedTime);
+				this.ValueChanged.InvokeAsync(Value);
+			}
 		}
 	}
 

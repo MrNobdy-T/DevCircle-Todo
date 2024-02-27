@@ -9,23 +9,23 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DevCircle_Todo.API.Migrations
+namespace DevCircle.Todo.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240129125457_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240227174703_UpdatedRelations")]
+    partial class UpdatedRelations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DevCircle_Todo.API.Entities.TodoItem", b =>
+            modelBuilder.Entity("DevCircle.Todo.Domain.Entities.TodoItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,11 +33,17 @@ namespace DevCircle_Todo.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<LocalDateTime>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<LocalDateTime>("DueTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -45,10 +51,12 @@ namespace DevCircle_Todo.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("TodoItems");
                 });
 
-            modelBuilder.Entity("DevCircle_Todo.API.Entities.User", b =>
+            modelBuilder.Entity("DevCircle.Todo.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,6 +75,22 @@ namespace DevCircle_Todo.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("DevCircle.Todo.Domain.Entities.TodoItem", b =>
+                {
+                    b.HasOne("DevCircle.Todo.Domain.Entities.User", "Owner")
+                        .WithMany("Todos")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DevCircle.Todo.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Todos");
                 });
 #pragma warning restore 612, 618
         }

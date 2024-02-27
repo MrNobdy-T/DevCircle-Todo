@@ -1,6 +1,8 @@
-﻿namespace DevCircle.Todo.Application.Commands
+﻿using DevCircle.Todo.Application.Common.Interfaces;
+
+namespace DevCircle.Todo.Application.Commands
 {
-    public class CreateTodoItemResponse
+    public class CreateTodoItemResponse : BaseResponse
     {
     }
 }

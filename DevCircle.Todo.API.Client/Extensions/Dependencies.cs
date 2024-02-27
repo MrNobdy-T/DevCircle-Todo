@@ -1,7 +1,13 @@
 ﻿using DevCircle.Todo.API.Client.Services;
 using DevCircle.Todo.Application.Common;
+using Flurl;
+using Flurl.Http;
+using Flurl.Http.Newtonsoft;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using NodaTime;
+using NodaTime.Serialization.JsonNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +26,28 @@ namespace DevCircle.Todo.API.Client.Extensions
 					.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 					.Build();
 
-			services.AddTransient(x =>
+			Url baseUrl = config
+				.GetSection("ClientSettings")
+				.GetSection("API-URL").Value!
+				.AppendPathSegment("api");
+
+
+			FlurlHttp.Clients.WithDefaults(x =>
 			{
-				return new TodoItemService(config);
+				var settings = new JsonSerializerSettings();
+				settings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+
+				x.Settings.JsonSerializer = new NewtonsoftJsonSerializer(settings);
 			});
-			services.AddTransient(x =>
+
+			services.AddScoped(x =>
 			{
-				return new UserService(config);
+				return new TodoItemService(new Uri(baseUrl.ToString()));
+			});
+
+			services.AddScoped(x =>
+			{
+				return new UserService(new Uri(baseUrl.ToString()));
 			});
 
 			return services;

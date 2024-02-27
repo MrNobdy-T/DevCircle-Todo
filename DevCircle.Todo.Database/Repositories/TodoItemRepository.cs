@@ -21,8 +21,16 @@ namespace DevCircle.Todo.Database.Repositories
 
 		public async Task Add(TodoItem entity)
 		{
-			_dbContext.TodoItems.Add(entity);
-			await _dbContext.SaveChangesAsync();
+			try
+			{
+				_dbContext.Users.AttachRange(entity.Owner);
+				await _dbContext.TodoItems.AddAsync(entity);
+				await _dbContext.SaveChangesAsync();
+			}
+			catch(Exception ex) 
+			{
+
+			}
 		}
 
 		public async Task<bool> Any(Expression<Func<TodoItem, bool>> predicate)
@@ -50,9 +58,9 @@ namespace DevCircle.Todo.Database.Repositories
 			return Task.FromResult<IEnumerable<TodoItem>>(entity);
 		}
 
-        public Task Update(TodoItem entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public Task Update(TodoItem entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

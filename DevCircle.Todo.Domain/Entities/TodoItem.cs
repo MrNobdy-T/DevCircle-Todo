@@ -10,27 +10,14 @@ namespace DevCircle.Todo.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public User Owner { get; }
+        public virtual User Owner { get; set; }
 
-        public LocalDateTime CreationDate { get; }
+        public LocalDateTime CreationDate { get; set; }
 
         public LocalDateTime DueTime { get; set; }
 
         public string Title { get; set; }
 
         public string? Description { get; set; }
-
-        public TodoItem(User owner, LocalDateTime creationDate, LocalDateTime dueTime, string title, string? description)
-        {
-            Owner = owner;
-            CreationDate = creationDate;
-            DueTime = dueTime;
-            Title = title;
-            Description = description;
-        }
-
-        public TodoItem()
-        {
-        }
     }
 }

@@ -13,10 +13,6 @@ namespace DevCircle.Todo.Domain.Entities
 
         public string Email { get; set; }
 
-        public User(string name, string email)
-        {
-            Name = name;
-            Email = email;
-        }
+        public ICollection<TodoItem> Todos { get; set; }
     }
 }

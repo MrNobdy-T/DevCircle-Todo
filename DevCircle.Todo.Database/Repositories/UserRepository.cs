@@ -21,7 +21,7 @@ namespace DevCircle.Todo.Database.Repositories
 
 		public async Task Add(User entity)
 		{
-			_dbContext.Users.Add(entity);
+			await _dbContext.Users.AddAsync(entity);
 			await _dbContext.SaveChangesAsync();
 		}
 

@@ -4,12 +4,16 @@ using DevCircle.Todo.Application.Queries.TodoItems;
 using Flurl;
 using Flurl.Http;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using NodaTime;
+using NodaTime.Serialization.JsonNet;
+using System.Text.Json;
 
 namespace DevCircle.Todo.API.Client.Services
 {
 	public class TodoItemService : AbstractAPIClient
 	{
-		public TodoItemService(IConfiguration config) : base(config)
+		public TodoItemService(Url baseUrl) : base(baseUrl)
 		{
 			BaseURL.AppendPathSegment("TodoItem");
 		}

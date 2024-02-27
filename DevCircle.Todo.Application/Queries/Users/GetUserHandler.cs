@@ -35,7 +35,8 @@ namespace DevCircle.Todo.Application.Queries.Users
 				};
 			}
 
-			users = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(await _repository.GetEntities(x => x.Id == request.UserProxy.Id));
+			users = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(await _repository.GetEntities(x => x.Name == request.UserProxy.Name
+			&& x.Email == request.UserProxy.Email));
 			return new GetUserResponse()
 			{
 				UserDTOs = users

@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Diagnostics.Metrics;
 using AutoMapper;
+using NodaTime.Serialization.SystemTextJson;
+using NodaTime;
 
 namespace DevCircle_Todo.API
 {
@@ -20,7 +22,11 @@ namespace DevCircle_Todo.API
 			// Add services to the container.
 			builder.Configuration.AddJsonFile("appsettings.json");
 
-			builder.Services.AddControllers();
+			builder.Services.AddControllers()
+				.AddJsonOptions(config =>
+				{
+					config.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+				});
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();

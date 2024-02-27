@@ -1,12 +1,17 @@
-﻿using Flurl;
+﻿using DevCircle.Todo.Application.Mapping;
+using Flurl;
 using Flurl.Http;
+using Flurl.Http.Configuration;
+using Flurl.Http.Newtonsoft;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft;
+using Newtonsoft.Json;
+using NodaTime;
+using NodaTime.Serialization.JsonNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DevCircle.Todo.Application.Common
@@ -15,12 +20,9 @@ namespace DevCircle.Todo.Application.Common
 	{
 		protected Url BaseURL { get; set; }
 
-		public AbstractAPIClient(IConfiguration config)
+		public AbstractAPIClient(Url baseUrl)
 		{
-			BaseURL = config
-				.GetSection("ClientSettings")
-				.GetSection("API-URL").Value!
-				.AppendPathSegment("api");
+			BaseURL = baseUrl;
 		}
 	}
 }

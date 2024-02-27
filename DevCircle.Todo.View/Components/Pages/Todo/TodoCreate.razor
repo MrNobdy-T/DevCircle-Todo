@@ -2,11 +2,13 @@
 @using Blazored.FluentValidation
 @using DevCircle.Todo.API.Client.Services
 @using DevCircle.Todo.Application.Mapping.DTOs
+@using DevCircle.Todo.Application.Extensions
 @using DevCircle.Todo.View.Components.Shared
 @using NodaTime
 @rendermode InteractiveServer
 @inject TodoItemService _todoService
 @inject UserService _userService
+@inject NavigationManager _navManager;
 
 <MudContainer MaxWidth="MaxWidth.Large">
 	<MudGrid>
@@ -37,13 +39,13 @@
 													For="@(() => _itemDTO.CreationDate)" />
 								</MudItem>
 								<MudItem>
-									<MudSelect Class="pa-5" T="UserDTO" Label="Owner" 
-										AnchorOrigin="Origin.BottomCenter" 
-										For="@(() => _itemDTO.Owner)"
-										@bind-Value=@_itemDTO.Owner>
+									<MudSelect Class="pa-5" T="UserDTO" Label="Owner"
+											   AnchorOrigin="Origin.BottomCenter"
+											   For="@(() => _itemDTO.Owner)"
+											   @bind-Value=@_itemDTO.Owner>
 										@foreach (UserDTO user in _userDTOs)
 										{
-											<MudSelectItem T="UserDTO" Value="user" >@user.Name</MudSelectItem>
+											<MudSelectItem T="UserDTO" Value="user">@user.Name</MudSelectItem>
 										}
 									</MudSelect>
 								</MudItem>
@@ -76,7 +78,12 @@
 
 	protected override async void OnInitialized()
 	{
-		_itemDTO.CreationDate = SystemClock.Instance.GetCurrentInstant().InUtc().LocalDateTime;
+		Instant now = SystemClock.Instance.GetCurrentInstant();
+		DateTimeZone tz = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+		ZonedDateTime today = now.InZone(tz);
+
+		_itemDTO.CreationDate = today.LocalDateTime;
+
 		var response = await _userService.GetAll();
 		_userDTOs = response.UserDTOs;
 		base.OnInitialized();
@@ -86,15 +93,14 @@
 	{
 		if (await _validator!.ValidateAsync())
 		{
-			await _todoService.Create(new()
+			var response = await _todoService.Create(new()
 				{
 					TodoItemDTO = _itemDTO
 				});
+			if (!response.HasErrorOccured())
+			{
+				_navManager.NavigateTo("/");
+			}
 		}
-	}
-
-	private async Task SelectOwner(UserDTO userDTO)
-	{
-
 	}
 }
