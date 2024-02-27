@@ -10,7 +10,10 @@
 			</MudItem>
 			<MudItem>
 				<MudInput T="string" @bind-Value="@DisplayedValue" Disabled="@IsDisabled" Variant="Variant.Outlined" For="@For" />
-				<ValidationMessage For="@For"/>
+				@if (For is not null)
+			{
+				<ValidationMessage For="@For" />
+			}
 		</MudItem>
 	</MudGrid>
 </MudContainer>

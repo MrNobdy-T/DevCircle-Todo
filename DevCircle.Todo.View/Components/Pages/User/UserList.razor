@@ -22,7 +22,7 @@
 		<MudList Clickable=true>
 			@foreach (var user in _userDTOs)
 			{
-				<UserListItem UserDTO="user" ClickHandler="@(async () => await NavigateToItem(user))" />
+				<UserListItem UserDTO="user" />
 			}
 		</MudList>
 
@@ -37,10 +37,4 @@
 		_userDTOs = result.UserDTOs;
 		await base.OnInitializedAsync();
 	}
-
-	private async Task NavigateToItem(UserDTO dto)
-	{
-
-	}
-
 }

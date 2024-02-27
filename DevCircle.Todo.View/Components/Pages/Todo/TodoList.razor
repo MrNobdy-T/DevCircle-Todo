@@ -2,54 +2,103 @@
 @rendermode InteractiveServer
 @using DevCircle.Todo.API.Client.Services
 @using DevCircle.Todo.Application.Mapping.DTOs
+@using DevCircle.Todo.View.Components.Shared
 @inject NavigationManager NavManager;
 @inject TodoItemService _todoService
 <PageTitle>Todos</PageTitle>
 
 <MudContainer>
-	<MudPaper Class="pa-5 ma-2" Outlined="true" Square="true">
-		<div class="d-flex">
-			<MudText Typo="Typo.h2">Todos</MudText>
-			<MudButton Variant="Variant.Filled"
-					   Size="Size.Medium"
-					   class="ml-auto"
-					   OnClick="@(() => NavManager.NavigateTo("/todo/create"))">
-				Add
-			</MudButton>
-		</div>
-	</MudPaper>
-	<MudPaper>
-		<div>
-			@if (_todoItems.Count() == 0)
-			{
-				<MudText Style="ruby-align">Nothing left to do ;)</MudText>
-			}
-			else
-			{
-				<MudList Clickable=true>
-					@foreach (var item in _todoItems)
+	<MudGrid>
+		<MudItem xs="12">
+			<MudPaper Class="pa-10 ma-2" Outlined="true" Square="true">
+				<div class="d-flex">
+					<MudText Typo="Typo.h2">Todos</MudText>
+					<MudButton Variant="Variant.Filled"
+							   Size="Size.Medium"
+							   class="ml-auto"
+							   OnClick="@(() => NavManager.NavigateTo("/todo/create"))">
+						Add
+					</MudButton>
+				</div>
+			</MudPaper>
+		</MudItem>
+		<MudItem xs="12">
+			<MudPaper>
+				<MudGrid>
+					<MudItem>
+						<MudCheckBox Label="Completed Todos only" @bind-Value="FilterCompleted" />
+					</MudItem>
+					<MudItem>
+						<MudTextField T="string" @bind-Text="_filterString" OnKeyUp="() => { HandleFilterChanged(); }" Title="Search"></MudTextField>
+					</MudItem>
+				</MudGrid>
+			</MudPaper>
+			<MudPaper>
+				<div>
+					@if (_filteredList.Count() == 0)
 					{
-						<TodoListItem TodoItem="item" ClickHandler="@(() =>NavigateToItem(item))" />
+						<MudText Style="ruby-align">Nothing left to do ;)</MudText>
 					}
-				</MudList>
-			}
-		</div>
-	</MudPaper>
+					else
+					{
+						<MudList Clickable=true>
+							@foreach (var item in _filteredList)
+							{
+								<TodoListItem TodoItem="item" ClickHandler="@(() =>NavigateToItem(item))" />
+							}
+						</MudList>
+					}
+				</div>
+			</MudPaper>
+		</MudItem>
+	</MudGrid>
 </MudContainer>
+
 @code {
 	private IEnumerable<TodoItemDTO> _todoItems = Enumerable.Empty<TodoItemDTO>();
 
 	private IEnumerable<TodoItemDTO> _filteredList = Enumerable.Empty<TodoItemDTO>();
 
+	private bool FilterCompleted
+	{
+		get => _filterCompleted;
+		set
+		{
+			_filterCompleted = value;
+			HandleFilterChanged();
+		}
+	}
+	private bool _filterCompleted;
+	private string _filterString = string.Empty;
+
 	protected override async Task OnInitializedAsync()
 	{
 		var result = await _todoService.GetAll();
 		_todoItems = result.TodoItemDTOs;
+		_filteredList = _todoItems;
 		await base.OnInitializedAsync();
 	}
 
 	private void NavigateToItem(TodoItemDTO item)
 	{
 		NavManager.NavigateTo($"/todo/{item.Id}");
+	}
+
+	public void HandleFilterChanged()
+	{
+		if(string.IsNullOrEmpty(_filterString) && !_filterCompleted)
+		{
+			_filteredList = _todoItems;
+		}
+
+		if (!string.IsNullOrEmpty(_filterString))
+		{
+			_filteredList = _filteredList.Where(x => x.Title.ToLower().Contains(_filterString.ToLower()));
+		}
+		if (_filterCompleted)
+		{
+			_filteredList = _filteredList.Where(x => x.IsCompleted);
+		}
+
 	}
 }
