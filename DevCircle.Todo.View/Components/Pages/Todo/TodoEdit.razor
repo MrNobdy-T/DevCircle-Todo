@@ -1,0 +1,81 @@
+﻿@page "/todo/{Id}"
+@using Blazored.FluentValidation
+@using DevCircle.Todo.API.Client.Services
+@using DevCircle.Todo.Application.Mapping.DTOs
+@using DevCircle.Todo.Application.Queries.TodoItems
+@using DevCircle.Todo.View.Components.Shared
+@inject TodoItemService _todoService
+
+<MudContainer MaxWidth="MaxWidth.Large">
+	<MudGrid>
+		<MudItem xs="12">
+			<MudPaper Class="pa-5" Outlined="true" Square="true">
+				<MudText Typo="Typo.h2">"@_itemDTO.Title"</MudText>
+			</MudPaper>
+		</MudItem>
+		<MudItem xs="12">
+			<MudPaper Class="pa-5">
+				<MudText Typo="Typo.h5">
+					Title: @_itemDTO.Title
+				</MudText>
+				@if (_itemDTO.DueTime.HasValue)
+				{
+					<MudText Typo="Typo.h5">
+						Due date: @_itemDTO.DueTime.Value.Date.ToString()
+					</MudText>
+				}
+				<MudText Typo="Typo.h5">
+					Creation date: @_itemDTO.CreationDate.Date.ToString()
+				</MudText>
+				<MudText Typo="Typo.h5">
+					Owner: @_itemDTO.Owner.Name
+				</MudText>
+			</MudPaper>
+		</MudItem>
+		<MudItem xs="12">
+			<EditForm Model="_itemDTO" OnSubmit="@SubmitFormAsync">
+				<MudGrid>
+					<MudItem xs="12">
+						<MudText Typo="Typo.h5" Class="pa-1">Description</MudText>
+					</MudItem>
+					<MudItem xs="12">
+						<MudPaper Outlined="true">
+							<MudTextField T="@string" @bind-Text="@_itemDTO.Description" FullWidth=true AutoGrow="@true" Disabled=true Lines="5"></MudTextField>
+						</MudPaper>
+					</MudItem>
+				</MudGrid>
+				<MudButton ButtonType="@ButtonType.Submit">Accept</MudButton>
+			</EditForm>
+		</MudItem>
+
+	</MudGrid>
+</MudContainer>
+
+@code {
+	[Parameter]
+	public string Id { get; set; }
+
+	private TodoItemDTO _itemDTO = new();
+
+	private FluentValidationValidator? _validator;
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		_itemDTO.Owner = new();
+		_itemDTO.Id = int.Parse(Id);
+		var response = await _todoService.Get(new()
+			{
+				TodoItemProxy = _itemDTO
+			});
+
+		_itemDTO = response.TodoItemDTOs.First(x => x.Id == _itemDTO.Id);
+
+		await base.OnInitializedAsync();
+	}
+
+	private async Task SubmitFormAsync()
+	{
+
+	}
+}

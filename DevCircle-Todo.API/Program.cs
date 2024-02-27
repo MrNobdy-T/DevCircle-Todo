@@ -10,6 +10,7 @@ using System.Diagnostics.Metrics;
 using AutoMapper;
 using NodaTime.Serialization.SystemTextJson;
 using NodaTime;
+using Newtonsoft.Json;
 
 namespace DevCircle_Todo.API
 {
@@ -26,6 +27,7 @@ namespace DevCircle_Todo.API
 				.AddJsonOptions(config =>
 				{
 					config.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+					config.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 				});
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();

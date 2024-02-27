@@ -1,15 +1,16 @@
 ﻿@using DevCircle.Todo.Application.Mapping.DTOs
+@using NodaTime
 @rendermode InteractiveServer
 
 <MudListItem Disabled="@false" OnClick="ClickHandler">
 	<!-- Customize the content of your list item here -->
 	<MudText Typo="Typo.h6">@TodoItem.Title</MudText>
 		<MudText Typo="Typo.subtitle1">Created: @TodoItem.CreationDate.Date.ToString()</MudText>
-	@if (TodoItem.DueTime.HasValue)
+	@if (TodoItem.DueTime.HasValue && TodoItem.DueTime.Value >= _thresholdTime)
 	{
 		<MudText Typo="Typo.subtitle1">Due: @TodoItem.DueTime.Value.Date.ToString()</MudText>
 	}
-		<MudText Typo="Typo.subtitle1">@TodoItem.Owner</MudText>
+		<MudText Typo="Typo.subtitle1">Owner: @TodoItem.Owner.Name</MudText>
 </MudListItem>
 
 	@code {
@@ -21,4 +22,16 @@
 
 	[Parameter]
 	public Action? ClickHandler { get; set; }
+
+	private LocalDateTime _thresholdTime;
+
+	protected override Task OnInitializedAsync()
+	{
+		Instant now = SystemClock.Instance.GetCurrentInstant();
+		DateTimeZone tz = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+		ZonedDateTime today = now.InZone(tz);
+
+		_thresholdTime = today.LocalDateTime;
+		return base.OnInitializedAsync();
+	}
 }

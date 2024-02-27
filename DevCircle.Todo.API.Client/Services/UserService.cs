@@ -21,14 +21,7 @@ namespace DevCircle.Todo.API.Client.Services
 
 		public async Task<CreateUserResponse> Create(CreateUserRequest request)
 		{
-			try
-			{
-				await new Url(BaseURL).AppendPathSegment("Create").PostJsonAsync(request);
-			}
-			catch
-			{
-
-			}
+			await new Url(BaseURL).AppendPathSegment("Create").PostJsonAsync(request);
 			return new CreateUserResponse();
 		}
 

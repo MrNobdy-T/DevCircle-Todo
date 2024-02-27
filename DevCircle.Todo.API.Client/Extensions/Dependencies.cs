@@ -35,6 +35,7 @@ namespace DevCircle.Todo.API.Client.Extensions
 			FlurlHttp.Clients.WithDefaults(x =>
 			{
 				var settings = new JsonSerializerSettings();
+
 				settings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
 
 				x.Settings.JsonSerializer = new NewtonsoftJsonSerializer(settings);

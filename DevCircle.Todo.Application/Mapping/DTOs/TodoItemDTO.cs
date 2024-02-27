@@ -16,5 +16,7 @@ namespace DevCircle.Todo.Application.Mapping.DTOs
 		public LocalDateTime? DueTime { get; set; }
 		public string Title { get; set; } = string.Empty;
 		public string? Description { get; set; }
+
+		public bool IsCompleted { get; set; }
 	}
 }

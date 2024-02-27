@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using DevCircle.Todo.Database.Interfaces;
@@ -21,16 +22,9 @@ namespace DevCircle.Todo.Database.Repositories
 
 		public async Task Add(TodoItem entity)
 		{
-			try
-			{
-				_dbContext.Users.AttachRange(entity.Owner);
-				await _dbContext.TodoItems.AddAsync(entity);
-				await _dbContext.SaveChangesAsync();
-			}
-			catch(Exception ex) 
-			{
-
-			}
+			_dbContext.Users.AttachRange(entity.Owner);
+			await _dbContext.TodoItems.AddAsync(entity);
+			await _dbContext.SaveChangesAsync();
 		}
 
 		public async Task<bool> Any(Expression<Func<TodoItem, bool>> predicate)
@@ -46,8 +40,7 @@ namespace DevCircle.Todo.Database.Repositories
 
 		public Task<IEnumerable<TodoItem>> GetAll()
 		{
-			var todoItems = _dbContext.TodoItems;
-
+			var todoItems = _dbContext.TodoItems.Include(x => x.Owner);
 			return Task.FromResult<IEnumerable<TodoItem>>(todoItems);
 		}
 

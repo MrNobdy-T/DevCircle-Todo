@@ -29,7 +29,7 @@
 				<MudList Clickable=true>
 					@foreach (var item in _todoItems)
 					{
-						<TodoListItem TodoItem="item" ClickHandler="@(async () => await NavigateToItem(item))" />
+						<TodoListItem TodoItem="item" ClickHandler="@(() =>NavigateToItem(item))" />
 					}
 				</MudList>
 			}
@@ -46,7 +46,8 @@
 		await base.OnInitializedAsync();
 	}
 
-	private async Task NavigateToItem(TodoItemDTO item)
+	private void NavigateToItem(TodoItemDTO item)
 	{
+		NavManager.NavigateTo($"/todo/{item.Id}");
 	}
 }
